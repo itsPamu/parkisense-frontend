@@ -8,8 +8,16 @@ export default function TestPage() {
     const [spiralImage, setSpiralImage] = useState<string | null>(null);
     const [voiceRecording, setVoiceRecording] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState<{ prediction: string; confidence: number } | null>(null); // Store Result
+    const [result, setResult] = useState<{ 
+        handwritingPrediction: string;
+        handwritingProbability: number;
+        voicePrediction: string;
+        voiceProbability: number;
+        finalPrediction: string;
+        finalConfidence: number;
+    } | null>(null); // Store Result
 
+    
     const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -35,7 +43,7 @@ export default function TestPage() {
         }
 
         setIsLoading(true);
-        setResult(null); // Clear previous result
+        setResult(null);
 
         const formData = new FormData();
         const imageFileInput = document.getElementById("spiral-upload") as HTMLInputElement;
@@ -56,9 +64,17 @@ export default function TestPage() {
             });
 
             const data = await response.json();
+            console.log("🔍 API Response:", data);
 
             if (response.ok) {
-                setResult({ prediction: data.final_prediction, confidence: data.confidence });
+                setResult({
+                    handwritingPrediction: data.hand_prediction,
+                    handwritingProbability: data.hand_probability,
+                    voicePrediction: data.voice_prediction,
+                    voiceProbability: data.voice_probability,
+                    finalPrediction: data.final_prediction, 
+                    finalConfidence: data.confidence 
+                    });
             } else {
                 alert(`Error: ${data.error}`);
             }
@@ -87,10 +103,16 @@ export default function TestPage() {
                 {result && (
                     <Box mt={4} textAlign="center" sx={{ backgroundColor: "#f0fdfa", padding: 2, borderRadius: 2 }}>
                         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#4dc0b5" }}>
-                            Prediction: {result.prediction}
+                            Prediction: {result.finalPrediction}
                         </Typography>
                         <Typography variant="body1" sx={{ color: "gray" }}>
-                            Confidence: {result.confidence.toFixed(2)}
+                            Confidence: {result.finalConfidence.toFixed(2)}
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: "bold", marginTop: 2 }}>
+                            🖋 Handwriting Prediction: {result.handwritingPrediction} {(result.handwritingProbability * 100).toFixed(0)}%
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                            🎙 Voice Prediction: {result.voicePrediction} {(result.voiceProbability * 100).toFixed(0)}%
                         </Typography>
                     </Box>
                 )}
