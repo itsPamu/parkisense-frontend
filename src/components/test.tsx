@@ -3,20 +3,24 @@ import { useState } from "react";
 import { MicIcon, UploadIcon } from "lucide-react";
 import { Box, Card, Button, SvgIcon, Typography, CircularProgress } from "@mui/material";
 
-export default function TestPage() {
+interface TestProps {
+    setTestResult: (result: {
+      handwritingPrediction: string;
+      handwritingProbability: number;
+      voicePrediction: string;
+      voiceProbability: number;
+      finalPrediction: string;
+      finalConfidence: number;
+      riskLevel: string;
+    }) => void;
+    fetchHistory: () => void;
+  }
+
+  export default function Test({ setTestResult, fetchHistory }: TestProps) {
     const [isTestMode, setIsTestMode] = useState(false);
     const [spiralImage, setSpiralImage] = useState<string | null>(null);
     const [voiceRecording, setVoiceRecording] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState<{ 
-        handwritingPrediction: string;
-        handwritingProbability: number;
-        voicePrediction: string;
-        voiceProbability: number;
-        finalPrediction: string;
-        finalConfidence: number;
-    } | null>(null); // Store Result
-
     
     const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         const file = event.target.files?.[0];
@@ -43,7 +47,6 @@ export default function TestPage() {
         }
 
         setIsLoading(true);
-        setResult(null);
 
         const formData = new FormData();
         const imageFileInput = document.getElementById("spiral-upload") as HTMLInputElement;
@@ -67,14 +70,16 @@ export default function TestPage() {
             console.log("🔍 API Response:", data);
 
             if (response.ok) {
-                setResult({
+                setTestResult({
                     handwritingPrediction: data.hand_prediction,
                     handwritingProbability: data.hand_probability,
                     voicePrediction: data.voice_prediction,
                     voiceProbability: data.voice_probability,
                     finalPrediction: data.final_prediction, 
-                    finalConfidence: data.confidence 
+                    finalConfidence: data.confidence,
+                    riskLevel: data.risk_level
                     });
+                    fetchHistory();
             } else {
                 alert(`Error: ${data.error}`);
             }
@@ -100,22 +105,6 @@ export default function TestPage() {
                     <li>Voice record yourself for 20 seconds.</li>
                     <li>Click <strong>Test Now</strong> to proceed with the test.</li>
                 </Box>
-                {result && (
-                    <Box mt={4} textAlign="center" sx={{ backgroundColor: "#f0fdfa", padding: 2, borderRadius: 2 }}>
-                        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#4dc0b5" }}>
-                            Prediction: {result.finalPrediction}
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: "gray" }}>
-                            Confidence: {result.finalConfidence.toFixed(2)}
-                        </Typography>
-                        <Typography variant="body2" sx={{ fontWeight: "bold", marginTop: 2 }}>
-                            🖋 Handwriting Prediction: {result.handwritingPrediction} {(result.handwritingProbability * 100).toFixed(0)}%
-                        </Typography>
-                        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                            🎙 Voice Prediction: {result.voicePrediction} {(result.voiceProbability * 100).toFixed(0)}%
-                        </Typography>
-                    </Box>
-                )}
             </Box>
             <Box sx={{ paddingTop: 2 }}>
                 {isLoading ? (
@@ -128,26 +117,51 @@ export default function TestPage() {
                     ) : (
                     !isTestMode ? (
                         <Box display="flex" flexDirection="column" alignItems="center">
-                            <Button
-                                variant="contained"
-                                size="large"
-                                sx={{
-                                    height: 64,
-                                    px: 6,
-                                    borderRadius: "9999px",
-                                    backgroundImage: "linear-gradient(to bottom right, #6CB4EE, #4dc0b5)",
-                                    fontSize: "1.125rem",
-                                    fontWeight: "bold",
-                                    color: "white",
-                                    transition: "all 0.3s ease-in-out",
-                                    "&:hover": {
-                                        backgroundImage: "linear-gradient(to bottom right, #5a9ed8, #3da89e)",
-                                        transform: "scale(1.05)",
-                                    },
-                                }}
-                                onClick={() => setIsTestMode(true)}
+                            {/* <Button
+                            variant="contained"
+                            size="large"
+                            sx={{
+                                height: 64,
+                                px: 6,
+                                borderRadius: "9999px",
+                                backgroundImage: "linear-gradient(to bottom right, #FFDEE9, #B5FFFC)", // Soft pink to pastel blue
+                                fontSize: "1.125rem",
+                                fontWeight: "bold",
+                                color: "#333", // Dark text for contrast
+                                transition: "all 0.3s ease-in-out",
+                                boxShadow: "0px 4px 10px rgba(255, 182, 193, 0.3)", // Soft shadow effect
+                                "&:hover": {
+                                backgroundImage: "linear-gradient(to bottom right, #FDCEDF, #A1E8D9)", // Pastel pink to mint green
+                                transform: "scale(1.08)", // Slight hover zoom
+                                boxShadow: "0px 6px 14px rgba(255, 182, 193, 0.5)", // Enhanced shadow on hover
+                                },
+                            }}
+                            onClick={() => setIsTestMode(true)}
                             >
-                                Test Now
+                            Test Now
+                            </Button> */}
+                            <Button
+                            variant="contained"
+                            size="large"
+                            sx={{
+                                height: 64,
+                                px: 6,
+                                borderRadius: "9999px",
+                                backgroundImage: "linear-gradient(to bottom right, #A7C7E7, #AEE1CD)", // Softer pastel shades
+                                fontSize: "1.125rem",
+                                fontWeight: "bold",
+                                color: "white",
+                                transition: "all 0.3s ease-in-out",
+                                boxShadow: "0 4px 10px rgba(170, 200, 230, 0.5)", // Subtle shadow for depth
+                                "&:hover": {
+                                backgroundImage: "linear-gradient(to bottom right, #90B4E0, #94D6C0)", // Slightly deeper pastel on hover
+                                transform: "scale(1.05)",
+                                boxShadow: "0 6px 15px rgba(170, 200, 230, 0.6)", // Enhanced shadow effect on hover
+                                },
+                            }}
+                            onClick={() => setIsTestMode(true)}
+                            >
+                            Test Now
                             </Button>
                         </Box>
                     ) : (
