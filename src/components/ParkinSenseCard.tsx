@@ -83,14 +83,14 @@ const ParkiSenseCard = () => {
       });
 
       const data = await response.json();
-
+      console.log('dataaaa', data)
       if (response.ok) {
         setResult({
             detected: data.parkinsons_detected,
-            confidence: data.combined_probability,
-            imageProb: data.image_probability,
-            voiceProb: data.voice_probability,
-            updrsScore: data.updrs_score,
+            confidence: data.fused_confidence,
+            imageProb: data.image_confidence,
+            voiceProb: data.voice_confidence,
+            updrsScore: data.severity_score,
             updrsSeverity: getUPDRSSeverity(data.updrs_score),
             imageUrl: spiralImage,
             waveformUrl: voiceRecording,
