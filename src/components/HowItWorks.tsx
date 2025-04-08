@@ -97,10 +97,19 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ setTestStarted }) => {
             px: 5,
             py: 1.5,
             borderRadius: "999px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            boxShadow: "none",
             cursor: "pointer",
             transition: "all 0.3s ease",
             "&:hover": { opacity: 0.9 },
+            outline: "none",
+            "&:focus": {
+              outline: "none",
+              boxShadow: "none",
+            },
+            "&:focus-visible": {
+              outline: "none",
+              boxShadow: "none",
+            },
           }}
         >
           Start Test
