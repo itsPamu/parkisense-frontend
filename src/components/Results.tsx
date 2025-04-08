@@ -14,7 +14,9 @@ import {
     detected: boolean;
     confidence: number;
     imageProb: number;
+    imageDetected: boolean;
     voiceProb: number;
+    voiceDetected: boolean;
     updrsScore: number;
     updrsSeverity: "Mild" | "Moderate" | "Severe";
     imageUrl: string | null;
@@ -26,7 +28,9 @@ import {
     detected,
     confidence,
     imageProb,
+    imageDetected,
     voiceProb,
+    voiceDetected,
     updrsScore,
     updrsSeverity,
     imageUrl,
@@ -34,6 +38,8 @@ import {
     onReset,
   }: TestResultProps) => {
     const isPositive = detected;
+    const isImagePositive = imageDetected;
+    const isVoicePosituve = voiceDetected;
   
     const colors = {
       red: "#E53935",
@@ -146,11 +152,11 @@ import {
                   borderRadius: "5px",
                   backgroundColor: "#f1f5f9",
                   "& .MuiLinearProgress-bar": {
-                    backgroundColor: isPositive ? colors.redBar : colors.greenBar,
+                    backgroundColor: isImagePositive ? colors.redBar : colors.greenBar,
                   },
                 }}
               />
-              <Typography fontWeight="bold" mt={0.5} color={isPositive ? colors.redBar : colors.greenBar}>
+              <Typography fontWeight="bold" mt={0.5} color={isImagePositive ? colors.redBar : colors.greenBar}>
                 {(imageProb * 100).toFixed(2)}%
               </Typography>
             </Box>
@@ -179,11 +185,11 @@ import {
                   borderRadius: "5px",
                   backgroundColor: "#f1f5f9",
                   "& .MuiLinearProgress-bar": {
-                    backgroundColor: isPositive ? colors.redBar : colors.greenBar,
+                    backgroundColor: isVoicePosituve ? colors.redBar : colors.greenBar,
                   },
                 }}
               />
-              <Typography fontWeight="bold" mt={0.5} color={isPositive ? colors.redBar : colors.greenBar}>
+              <Typography fontWeight="bold" mt={0.5} color={isVoicePosituve ? colors.redBar : colors.greenBar}>
                 {(voiceProb * 100).toFixed(2)}%
               </Typography>
             </Box>

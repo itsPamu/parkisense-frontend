@@ -13,7 +13,9 @@ const ParkiSenseCard = () => {
     detected: boolean;
     confidence: number;
     imageProb: number;
+    imageDetected: boolean;
     voiceProb: number;
+    voiceDetected: boolean;
     updrsScore: number;
     updrsSeverity: "Mild" | "Moderate" | "Severe";
     imageUrl: string | null;
@@ -22,7 +24,9 @@ const ParkiSenseCard = () => {
     detected: false,
     confidence: 0,
     imageProb: 0,
+    imageDetected: false,
     voiceProb: 0,
+    voiceDetected: false,
     updrsScore: 0,
     updrsSeverity: "Mild",
     imageUrl: null,
@@ -86,10 +90,12 @@ const ParkiSenseCard = () => {
       console.log('dataaaa', data)
       if (response.ok) {
         setResult({
-            detected: data.parkinsons_detected,
+            detected: data.fused_prediction,
             confidence: data.fused_confidence,
             imageProb: data.image_confidence,
+            imageDetected: data.image_prediction,
             voiceProb: data.voice_confidence,
+            voiceDetected: data.voice_prediction,
             updrsScore: data.severity_score,
             updrsSeverity: getUPDRSSeverity(data.updrs_score),
             imageUrl: spiralImage,
@@ -144,7 +150,9 @@ const ParkiSenseCard = () => {
           detected={result.detected}
           confidence={result.confidence}
           imageProb={result.imageProb}
+          imageDetected={result.imageDetected}
           voiceProb={result.voiceProb}
+          voiceDetected={result.voiceDetected}
           updrsScore={result.updrsScore}
           updrsSeverity={result.updrsSeverity}
           imageUrl={result.imageUrl ?? ""}
@@ -158,7 +166,9 @@ const ParkiSenseCard = () => {
               detected: false,
               confidence: 0,
               imageProb: 0,
+              imageDetected: false,
               voiceProb: 0,
+              voiceDetected: false,
               updrsScore: 0,
               updrsSeverity: "Mild",
               imageUrl: null,
