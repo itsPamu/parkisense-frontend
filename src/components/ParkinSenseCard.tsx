@@ -17,7 +17,6 @@ const ParkiSenseCard = () => {
     voiceProb: number;
     voiceDetected: boolean;
     updrsScore: number;
-    updrsSeverity: "Mild" | "Moderate" | "Severe";
     imageUrl: string | null;
     waveformUrl: string | null;
   }>({
@@ -28,7 +27,6 @@ const ParkiSenseCard = () => {
     voiceProb: 0,
     voiceDetected: false,
     updrsScore: 0,
-    updrsSeverity: "Mild",
     imageUrl: null,
     waveformUrl: null,
   });
@@ -52,12 +50,6 @@ const ParkiSenseCard = () => {
         alert("Please upload a valid WAV file.");
       }
     }
-  };
-
-  const getUPDRSSeverity = (score: number): "Mild" | "Moderate" | "Severe" => {
-    if (score < 20) return "Mild";
-    if (score < 40) return "Moderate";
-    return "Severe";
   };
 
   const handleAnalyze = async () => {
@@ -97,7 +89,6 @@ const ParkiSenseCard = () => {
             voiceProb: data.voice_confidence,
             voiceDetected: data.voice_prediction,
             updrsScore: data.severity_score,
-            updrsSeverity: getUPDRSSeverity(data.updrs_score),
             imageUrl: spiralImage,
             waveformUrl: voiceRecording,
         });
@@ -154,7 +145,6 @@ const ParkiSenseCard = () => {
           voiceProb={result.voiceProb}
           voiceDetected={result.voiceDetected}
           updrsScore={result.updrsScore}
-          updrsSeverity={result.updrsSeverity}
           imageUrl={result.imageUrl ?? ""}
           waveformUrl={result.waveformUrl ?? ""}
           onReset={() => {
@@ -170,7 +160,6 @@ const ParkiSenseCard = () => {
               voiceProb: 0,
               voiceDetected: false,
               updrsScore: 0,
-              updrsSeverity: "Mild",
               imageUrl: null,
               waveformUrl: null,
             });

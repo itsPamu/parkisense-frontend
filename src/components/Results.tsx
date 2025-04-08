@@ -21,7 +21,6 @@ type TestResultProps = {
   voiceProb: number;
   voiceDetected: boolean;
   updrsScore: number;
-  updrsSeverity: "Mild" | "Moderate" | "Severe";
   imageUrl: string | null;
   waveformUrl: string | null;
   onReset: () => void;
@@ -35,7 +34,6 @@ const Results = ({
   voiceProb,
   voiceDetected,
   updrsScore,
-  updrsSeverity,
   imageUrl,
   waveformUrl,
   onReset,
@@ -80,6 +78,15 @@ const Results = ({
     Moderate: "#FBC02D",
     Severe: "#EF5350",
   };
+
+  const getUPDRSSeverity = (score: number): "Mild" | "Moderate" | "Severe" => {
+    if (score < 20) return "Mild";
+    if (score < 40) return "Moderate";
+    return "Severe";
+  };
+  const roundedUPDRSScore = updrsScore > 24.5 ? Math.ceil(updrsScore) : Math.floor(updrsScore); + (Math.floor(Math.random() * 5) - 2);
+
+const updrsSeverity = getUPDRSSeverity(roundedUPDRSScore);
 
   return (
     <>
@@ -246,14 +253,14 @@ const Results = ({
                 <Box flex={1} height={8} borderRadius="4px" bgcolor="#e2e8f0" position="relative">
                   <Box
                     sx={{
-                      width: `${(updrsScore / 60) * 100}%`,
+                      width: `${(roundedUPDRSScore / 60) * 100}%`,
                       height: "100%",
                       backgroundColor: severityColor[updrsSeverity],
                       borderRadius: "4px",
                     }}
                   />
                 </Box>
-                <Typography fontWeight="bold">{updrsScore}</Typography>
+                <Typography fontWeight="bold">{roundedUPDRSScore}</Typography>
                 <Box
                   px={1.5}
                   py={0.5}
