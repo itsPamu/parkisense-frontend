@@ -10,7 +10,7 @@ const steps = [
   {
     number: 2,
     title: "Record voice",
-    subtitle: 'Say "aaah" for 5 seconds',
+    subtitle: 'Upload a voice recording',
   },
   {
     number: 3,

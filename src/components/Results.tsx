@@ -7,8 +7,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import { CheckCircle, AlertCircle, Download, Info } from "lucide-react";
-import recordingIcon from "./recording.png";
-import spiralIcon from "./spiral.png";
+import recordingIcon from "../assets/recording.png";
+import spiralIcon from "../assets/spiral.png";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from "react";
@@ -80,13 +80,12 @@ const Results = ({
   };
 
   const getUPDRSSeverity = (score: number): "Mild" | "Moderate" | "Severe" => {
-    if (score < 20) return "Mild";
+    if (score < 25) return "Mild";
     if (score < 40) return "Moderate";
     return "Severe";
   };
-  const roundedUPDRSScore = updrsScore > 24.5 ? Math.ceil(updrsScore) : Math.floor(updrsScore); + (Math.floor(Math.random() * 5) - 2);
 
-const updrsSeverity = getUPDRSSeverity(roundedUPDRSScore);
+const updrsSeverity = getUPDRSSeverity(updrsScore);
 
   return (
     <>
@@ -253,14 +252,14 @@ const updrsSeverity = getUPDRSSeverity(roundedUPDRSScore);
                 <Box flex={1} height={8} borderRadius="4px" bgcolor="#e2e8f0" position="relative">
                   <Box
                     sx={{
-                      width: `${(roundedUPDRSScore / 60) * 100}%`,
+                      width: `${(updrsScore / 60) * 100}%`,
                       height: "100%",
                       backgroundColor: severityColor[updrsSeverity],
                       borderRadius: "4px",
                     }}
                   />
                 </Box>
-                <Typography fontWeight="bold">{roundedUPDRSScore}</Typography>
+                <Typography fontWeight="bold">{(updrsScore).toFixed(2)}</Typography>
                 <Box
                   px={1.5}
                   py={0.5}

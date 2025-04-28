@@ -1,8 +1,8 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { UploadIcon } from "lucide-react";
 import { LoadingButton } from "@mui/lab";
-import spiralIcon from "./spiral.png";
-import recordingIcon from "./recording.png";
+import recordingIcon from "../assets/recording.png";
+import spiralIcon from "../assets/spiral.png";
 
 interface UploadTestSectionProps {
   onAnalyze: () => void;
